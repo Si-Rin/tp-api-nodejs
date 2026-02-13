@@ -1,13 +1,12 @@
-
 // ============================================
 // IMPORTS
 // ============================================
 
 // Serveur Express principal - Application de gestion des étudiants
-const express = require('express');
+const express = require("express");
 
-const dotenv = require('dotenv');
-const connectDB = require('./config/database');
+const dotenv = require("dotenv");
+const connectDB = require("./config/database");
 
 // ============================================
 // CONFIGURATION
@@ -35,23 +34,23 @@ app.use(express.json());
 // ============================================
 
 // Route d'accueil - pour tester que le serveur fonctionne
-app.get('/', (req, res) => {
-    res.json({
-        message: '🎓 Bienvenue sur l\'API de gestion des étudiants! ',
-        version: '1.0.0',
-        endpoints: {
-            listeEtudiants: 'GET /api/etudiants',
-            creerEtudiant: 'POST /api/etudiants',
-            voirEtudiant: 'GET /api/etudiants/:id',
-            modifierEtudiant: 'PUT /api/etudiants/:id',
-            supprimerEtudiant: 'DELETE /api/etudiants/: id',
-            parFiliere: 'GET /api/etudiants/filiere/: filiere'
-        }
-    });
+app.get("/", (req, res) => {
+  res.json({
+    message: "🎓 Bienvenue sur l'API de gestion des étudiants! ",
+    version: "1.0.0",
+    endpoints: {
+      listeEtudiants: "GET /api/etudiants",
+      creerEtudiant: "POST /api/etudiants",
+      voirEtudiant: "GET /api/etudiants/:id",
+      modifierEtudiant: "PUT /api/etudiants/:id",
+      supprimerEtudiant: "DELETE /api/etudiants/: id",
+      parFiliere: "GET /api/etudiants/filiere/: filiere",
+    },
+  });
 });
 
 // Monter les routes des étudiants sur /api/etudiants
-app.use('/api/etudiants', require('./routes/etudiantRoutes'));
+app.use("/api/etudiants", require("./routes/etudiantRoutes"));
 
 // ============================================
 // GESTION DES ERREURS
@@ -59,10 +58,10 @@ app.use('/api/etudiants', require('./routes/etudiantRoutes'));
 
 // Route 404 pour les URLs non trouvées
 app.use((req, res) => {
-    res.status(404).json({
-        success: false,
-        message: `Route ${req.originalUrl} non trouvée`
-    });
+  res.status(404).json({
+    success: false,
+    message: `Route ${req.originalUrl} non trouvée`,
+  });
 });
 
 // ============================================
@@ -72,7 +71,7 @@ app.use((req, res) => {
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-    console.log(`
+  console.log(`
     ╔════════════════════════════════════════════╗
     ║   🚀 Serveur démarré avec succès!          ║
     ╠════════════════════════════════════════════╣
@@ -80,4 +79,13 @@ app.listen(PORT, () => {
     ║   📚 API: http://localhost:${PORT}/api/etudiants║
     ╚════════════════════════════════════════════╝
     `);
+});
+
+// Health check endpoint
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    status: "OK",
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+  });
 });
